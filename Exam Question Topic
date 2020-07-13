@@ -1,0 +1,11 @@
+Fix broken cluster
+Fix worker node connectivity issue
+Install using KUBEAdm on both worker and master nodes
+Create secret and mount it as evs variable and as volume
+Create NS
+Create deployment, update image to another and roll back to original
+4 questions were of jsonpath (1 or 2 Marks)
+Create Static pod
+Init container
+IMP Question: Print name of nodes which has taint "NoSchedule" 
+  - Solution: kubectl get node -o custom-columns=NAME:.metadata.name,TAINT:.spec.taints[*].effect | grep -v NoSchedule
