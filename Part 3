@@ -1,0 +1,42 @@
+Question 1: Service
+1. Create a deployment named kplabs-service
+2. The deployment should have three replicas and the image should be based on nginx
+3. Create a service based on NodePort.
+4. The service port should be 8080.
+5. Verify if you are able to see the index.html of Nginx from service port.
+Question 2: Service and Endpoints
+1. Create a deployment named deployment-manual
+Launch 3 replicas of nginx image. Create a service named service-manual.
+Create an endpoint with the IP address of all the pods of deployment-manual and associate it with service-manual.
+Verify the endpoints of the service to check if IP addresses have been populated.
+</details>
+Question 3: Load Balanacer Service
+1. Create a deployment named kplabs-dmz
+2. There should be two replicas of nginx image as part of the deployment.
+3. Create a service name service-elb and it should be based on LoadBalancer type.
+4. The Load Balancer should list on Port 80.
+5. Once launched, verify that the nginx default page load when you open the Load Balancer IP in browser.
+Question 4: Single Service Ingress
+1. Create a pod named single-pod. Expose Port 80.
+2, Create service named single-service. The service should listen on port of 8080. It should direct traffic to single-pod
+3. Create an ingress named single-ingress. Ingress should have following specification:
+       i) Should direct all the traffic to single-service on the service port of 8080
+4. Verify if the ingress is created.
+5. Describe all the ingress rules.
+6. Does the ingress have any IP address on "ADDRESS" field? If not, find out what can be the reason behind it?
+
+Question 5: Named Based Virtual Hosting
+1. Create an ingress which satisfies following requirement:
+
+
+1. example.com   --|     Requests Redirects to      |  service1:8085
+2. |  
+3. test.com      --|     Requests Redirects to      |  service2:8089
+4.  
+5. Other Requests -|     Requests Redirects to      |  service3:9005
+
+2. All the pods should be based on nginx image.
+Question 6: Namespaces
+1. Create a namespace named kplabs-namespace
+2. Launch a POD from nginx image. Expose Port 8080. Pod should be in kplabs-namespace
+3. Verify the status of the pod with kubectl command
