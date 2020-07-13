@@ -1,0 +1,36 @@
+1. Question 1: Secrets and Volumes
+
+a. Create a secret name app-creds which has following data:
+
+       appuser: dbreadonly
+       apppass: myDBPassword#%
+b. Create a pod with the name of secret-pod.
+
+c. Mount the secret to the pod so that it is available in the path of /etc/secret
+
+2. Question 2: ConfigMaps
+
+1. Following is the configuration file for an application.
+
+2. Create a ConfigMap based on the configuration file.
+
+3. Mount the configmap in such a way that the configuration file is accessible in the location of /etc/app.config
+
+    defaults
+        mode http
+        timeout connect 5000ms
+        timeout client 50000ms
+        timeout server 50000ms
+
+
+3. Question 3: Pod Security Policies
+
+
+
+Create a POD named kplabs-security with the following configuration:
+
+
+
+   a. The primary process should run with the userid of 1000
+
+   b. The primary group id should be 2000
