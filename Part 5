@@ -1,0 +1,63 @@
+Practice Test - Domain 5
+Question 1: Kubernetes Secrets
+1. Create a new secret named kplabs-secret
+2. The secret should have following data:
+
+1. username: admin
+2. password: password123
+3. Mount the secret inside pod in form of environment variable in the following way:
+        a. username should be associated with environment variable of DB_USERNAME inside the pod.
+       a. password should be associated with environment variable of DB_PASS inside the pod.
+4. Verify the same by connecting inside the container.
+
+Question 2: Network Security Policies   
+Create three namespace named development, production, and security.
+Launch a pod from busybox image in each of these namespace.
+Pods within development namespace should not be able to communicate with pods in production namespace.
+Pods within security should be able to communicate with all the pods.
+
+Question 3: Network Security Policies
+Create a namespace named forensics
+All the pods within the forensics namespace should not be able to communicate outside world (egress isolation)
+Create a pod named investigator in the default namespace.
+Pods within forensics namespace should only allow connection from IP of the investigator pod.
+Question 4: Linux Capabilities
+1. Create a pod named kplabs-privileged.
+2. All the containers inside the pod should be based on privileged mode.
+3. Find out all the capabilities associated with the POD and store it in a file named capabilities.txt under /tmp directory.
+	apiVersion: v1
+	kind: Pod
+	metadata:
+	  name: security-context-demo-2
+	spec:
+	  securityContext:
+	    runAsUser: 1000
+	  containers:
+	  - name: sec-ctx-demo-2
+	    image: gcr.io/google-samples/node-hello:1.0
+	    securityContext:
+	      runAsUser: 2000
+	      allowPrivilegeEscalation: true
+	      prvileged= true
+	
+Question 5: Creating User with Certificate Based Authentication  --- IMP
+Alice is a new member of the DevOps team. She wants to have access to the K8s cluster to perform certain operations.
+As part of security requirement, the authentication to K8s cluster should only be based on certificates. Perform all the necessary steps and generate the necessary kubeconfig file.
+The output of following command should result in output:
+kubectl --context=alice-context get pods
+
+Question 6: Authorization
+Alice has received a new task to deploy an application within the Kubernetes cluster. The application uses POD and Secret resources within the cluster.  The application should be deployed only in the production namespace
+Assign all the necessary permission to Alice to perform all operation on the resources required for application to be deployed within the production namespace.
+Verify if everything works by creating a POD and Secret from the Alice user context in the production namespace.
+Verify if everything works by creating a POD and Secret from the Alice user context in the default namespace.
+Remove all the permission associated with the Alice user.
+
+Question 7: Authorization
+1. Create a cluster role in such way that it provides access to perform all read operations on resource PODS across all the namespaces.
+2. Name of the role should be kplabs-clusterrole
+3. Bind the cluster role to binding named read-global-pods
+4. Associate the binding with the Alice user.
+5. Create two namespace named testing and production.
+6. Launch test pods in both the namespaces
+6. With the context of Alice, verify if you are able to list the pods in the testing and production namespace.
