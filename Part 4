@@ -1,0 +1,36 @@
+Question 1: Resource Quota
+Create a pod named kplabs-quota. The pod should have following configuration:
+a. Should run with nginx image.
+b. It should use maximum of 512 MiB of memory.
+c. It should use maximum of 2 core CPU.
+d. The POD should require a minimum of 128 MiB of memory before it is scheduled.
+2. Question 2: Daemon Sets
+1. Create a daemon set named kplabs-daemonset
+2. The daemon set should launch 1 pod of nginx image in all the worker nodes.
+3. Launch 1 more worker node in Digital Ocean and verify if daemon set is successful.
+3. Question 3: Static Pods
+1. Launch a K8s cluster based on minikube
+2. Launch a static pod named kplabs-static. The pod should be launched from nginx image.
+3. Verify the status of the pod.
+4. Question 4: Node Selector
+1. Create a Digital Ocean cluster which has two worker nodes.
+2. The first worker node should have label of worker=one
+3. The second worker node should have label of worker=two
+4. Create a new pod named workerone-pod. The pod should only be launched in the first worker node.
+5. Create a new pod named workertwo-pod. The pod should only be launched in the second worker node.
+6. Write a kubectl command which shows list of available pods and it's associated worker nodes.
+7. Verify if pods are created in the right worker nodes.
+8. Remove all the labels and pods.
+6. Question 5: Node Affinity - Required Scheduling
+1. Create a Digital Ocean cluster which has two worker nodes.
+2. Add the following label to worker node one availabilityzone=az1
+3. Add the following label to worker node two availabilityzone:=az2
+4. Create a pod named kplabs-az1. The pod should have an affinity were is only gets launched in node running in availability zone of az1
+5. Create a pod named kplabs-az2. The pod can launch in any node which is not running in availability zone of az1
+6. Create a pod named kplabs-az3. The pod should launch in any node which has is running in availabilityzone of az3
+7. Verify the status of all the pods and check on which nodes they are running.
+7. Question 5: Node Affinity - Preferred Scheduling
+1. Create a pod based on Node Affinity.
+2. Pod should be based on nginx image
+3. Pod should be preferred to run on node which has following labels: cpu=intel or cpu=amd
+4. If none of the nodes have the label, the pod should launch in any of the available node.
