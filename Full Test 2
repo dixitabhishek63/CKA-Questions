@@ -1,0 +1,158 @@
+1. Create a node that has a SSD and label it as such.
+	1. Create a pod that is only scheduled on SSD nodes.
+	2. Create 2 pod definitions: the second pod should be scheduled to run anywhere the first pod is running - 2nd pod runs alongside the first pod.  ---  Check Solution
+	3.  Create a deployment running nginx version 1.12.2 that will run in 2 pods a. Scale this to 4 pods. b. Scale it back to 2 pods. c. Upgrade this to 1.13.8 d. Check the status of the upgrade e. How do you do this in a way that you can see history of what happened? f. Undo the upgrade  --  DONE
+	Create a service that uses a scratch disk. a. Change the service to mount a disk from the host. b. Change the service to mount a persistent volume.  ---  Doubt on a Q.
+		a. apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0003
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: slow
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /tmp
+    server: 172.17.0.2
+		
+	4. Create a pod that has a liveness check -- DONE Using Documentation
+	5. Create a service that manually requires endpoint creation - and create that too -- CHECK DON’T KNOW -- WE CAN MANUALLY CREATE ENDPOINTS with the help of endpoint manifest file.
+		---
+		kind: Service
+		apiVersion: v1
+		metadata:
+		  name: my-service-6
+		spec:
+		  ports:
+		  - protocol: TCP
+		    port: 80
+		    targetPort: 9376
+		
+		---
+		
+		kind: Endpoints
+		apiVersion: v1
+		metadata:
+		  name: my-service-6
+		subsets:
+		  - addresses:
+		      - ip: 1.2.3.4
+		    ports:
+		      - port: 9376
+		
+	6. Create a daemon set a. Change the update strategy to do a rolling update but delaying 30 seconds between pod updates ??? Don’t know :(
+		a.       terminationGracePeriodSeconds: 30
+	7. Create a static pod -- DONE
+	8. Create a busybox container without a manifest. Then edit the manifest. -- Done
+	9. Create a pod that uses secrets a. Pull secrets from environment variables b. Pull secrets from a volume c. Dump the secrets out via kubectl to show it worked -- DONE ALL
+		a. kubectl exec -i -t secret-test -- /bin/sh -c 'echo "username: $NAME"'
+		kind: Pod
+		metadata:
+		  name: secret-test
+		spec:
+		  containers:
+		    - name: test-container
+		      image: nginx
+		      volumeMounts:
+		        # name must match the volume name below
+		        - name: secret-volume
+		          mountPath: /etc/secret-volume
+		      env:
+		      - name: NAME
+		        valueFrom:
+		          secretKeyRef:
+		            name: tests
+		            key: name
+		      - name: LAST
+		        valueFrom:
+		          secretKeyRef:
+		            name: tests
+		            key: last
+		  # The secret data is exposed to Containers in the Pod through a Volume.
+		  volumes:
+		    - name: secret-volume
+		      secret:
+		        secretName: tests
+		
+	10. Create a job that runs every 3 minutes and prints out the current time.  -- DOUBT WITH JOB AND CRONJOB
+	11. Create a job that runs 20 times, 5 containers at a time, and prints "Hello parallel world" -- CHECK SOLUTION  Check this before exam
+		apiVersion: batch/v1
+		kind: Job
+		metadata:
+		name: job-paralle
+		spec:
+		completions: 20  ----------IMP
+		parallelism: 5
+		template:
+		metadata:
+		name: job-paralle
+		spec:
+		containers:
+		- name: job
+		image: busybox
+		command: ["sh", "-c", "echo 'Hello parallel world' "]
+		restartPolicy: Never
+		
+	12. Create a service that uses an external load balancer and points to a 3 pod cluster running nginx. -- Done
+	13. Create a horizontal autoscaling group that starts with 2 pods and scales when CPU usage is over 50%. -- done
+		a. kubectl autoscale rc foo --max=5 --cpu-percent=80
+		
+	14. Create a networking policy such that only pods with the label access=granted can talk to it. a. Create an nginx pod and attach this policy to it. b. Create a busybox pod and attempt to talk to nginx - should be blocked c. Attach the label to busybox and try again - should be allowed   -- PENDING
+	15. Create a service that references an externalname. a. Test that this works from another pod -- HOW TO DO THIS ONE??
+		a. apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  namespace: prod
+spec:
+  type: ExternalName
+  externalName: my.database.example.com
+		
+	16. Create a pod that runs all processes as user 1000.  -- User security context
+	17. Create a namespace a. Run a pod in the new namespace b. Put memory limits on the namespace c. Limit pods to 2 persistent volumes in this namespace
+		apiVersion: v1
+		kind: ResourceQuota
+		metadata:
+		  name: mem-cpu-demo
+		  namespace: dev
+		spec:
+		  hard:
+		    requests.cpu: "1"
+		    requests.memory: 1Gi
+		    limits.cpu: "2"
+		    limits.memory: 2Gi
+		    persistentvolumeclaims: "1"
+		
+	18. Write an ingress rule that redirects calls to /foo to one service and to /bar to another -- Done using documentation
+	19. Write a service that exposes nginx on a nodeport a. Change it to use a cluster port b. Scale the service c. Change it to use an external IP d. Change it to use a load balancer
+		a. kind: Service	
+			apiVersion: v1
+			metadata:
+			name: my-service-exip
+			spec:
+			selector:
+			app: db
+			ports:
+			- name: http
+			protocol: TCP
+			port: 80
+			targetPort: 80
+			externalIPs:
+			- 34.231.104.100
+		
+	20. Deploy nginx with 3 replicas and then expose a port a. Use port forwarding to talk to a specific port
+	21. Make an API call using CURL and proper certs
+		kubectl proxy --port=8080 &
+		curl http://localhost:8080/api/
+		curl https://172.31.32.75:6443/api --cacert ca.crt 
+		
+	22. Upgrade a cluster with kubeadm
+	23. Get logs for a pod and scheduler
+	24. Deploy a pod with the wrong image name (like --image=nginy) and find the error message.
