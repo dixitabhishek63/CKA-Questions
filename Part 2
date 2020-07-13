@@ -1,0 +1,26 @@
+Question 1: Labels
+Create a pod named kplabs-label. The pod should be launched from nginx image. The name of container should be nginx-container. Attach following label to the pod.
+
+1. env=production
+2. app=webserver
+
+Question 2: Deployments
+Create a deployment named kplabs-deployment. The deployment should be launched from nginx image. The deployment should be three replicas. The selector should be based on the label of app=nginx
+Question 3: Deployments - Rolling Updates and Rollbacks
+1. Create a deployment named kplabs-update.
+2. The deployment should be launched from nginx image.
+3. There should be two  replicas.
+4. Verify the status of the deployment.
+5. As part of rolling update, update the image to nginx2:alpine.
+6. Verify the status of deployment.
+7. Perform a rollback to the previous version and Verify the status of deployment.
+Question 4: Readiness Probe
+Launch a pod from the nginx image. Create a readiness probe for the pod.
+Question 5: Labels and Selectors
+1. Create a deployment named kplabs-selector.
+2.  The pods should be launched from nginx image.
+3. The pods should only be launched in a node which has a label of disk=ssd
+4. Observe the status of deployment.
+5. Add the appropriate label to the worker node and then observe the status of the deployment.
+Question 6:  CronJob
+Create a job named kplabs-job. The job should run every minute and should print out the current date.
